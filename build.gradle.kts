@@ -1,8 +1,12 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
+val ktor_version: String by project
+
 plugins {
     kotlin("jvm")
     id("org.jetbrains.compose")
+    kotlin("plugin.serialization") version "1.6.0"
+
 }
 
 group = "com.aidev"
@@ -22,6 +26,11 @@ dependencies {
     implementation(compose.desktop.currentOs)
     implementation(compose.materialIconsExtended)
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.6.3")
+    implementation("io.ktor:ktor-client-core:$ktor_version")
+    implementation("io.ktor:ktor-client-okhttp:$ktor_version")
+    implementation("io.ktor:ktor-client-content-negotiation:$ktor_version")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
+
 }
 
 compose.desktop {
