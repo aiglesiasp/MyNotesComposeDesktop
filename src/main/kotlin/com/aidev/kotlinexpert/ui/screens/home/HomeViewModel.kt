@@ -1,9 +1,14 @@
 package com.aidev.kotlinexpert.ui.screens.home
 
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import com.aidev.kotlinexpert.data.Filter
 import com.aidev.kotlinexpert.data.Note
-import com.aidev.kotlinexpert.data.fakeNotes
+import com.aidev.kotlinexpert.data.remote.NotesRepository
+import com.aidev.kotlinexpert.data.remote.notesClient
+import io.ktor.client.call.*
+import io.ktor.client.request.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,27 +22,25 @@ operator fun <T> MutableStateFlow<T>.setValue(owner: Any?, property: KProperty<*
     this.value = newValue
 }
 
+class HomeViewModel(private val scope: CoroutineScope) {
 
+    var state by mutableStateOf(UiState())
+        private set
 
-object HomeState {
-    private val _states = MutableStateFlow(UiState())
-    val states = _states.asStateFlow()
+    init {
+        loadNotes()
+    }
 
-    //var states: UiState by MutableStateFlow(UiState())
-    //    private set
-
-    fun loadNotes(coroutineScope: CoroutineScope) {
-        coroutineScope.launch {
-            _states.value = UiState(loading = true)
-            Note.fakeNotes.collect {
-                _states.value = UiState(notes = it, loading = false)
-            }
-
+    private fun loadNotes() {
+        scope.launch {
+            state = UiState(loading = true)
+            val response = NotesRepository.getAll()
+            state = UiState(notes = response)
         }
     }
 
     fun onFilterClick(filter: Filter) {
-        _states.update { it.copy(filter = filter) }
+        state = state.copy(filter = filter)
     }
 }
 

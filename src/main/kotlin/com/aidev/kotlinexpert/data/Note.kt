@@ -1,31 +1,18 @@
 package com.aidev.kotlinexpert.data
 
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.flow
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class Note(
+    val id: Long = NEW_NOTE,
     val title: String,
     val description: String,
     val type: NoteType = NoteType.AUDIO
 ) {
-    enum class NoteType { TEXT, AUDIO}
-    companion object
-}
-
-val Note.Companion.fakeNotes get() = flow {
-   delay(2000)
-    val list = (1..10).map {
-       Note(
-            title = "Title $it",
-            description = "Description $it",
-            type = if(it % 3 == 0) Note.NoteType.AUDIO else Note.NoteType.TEXT
-        )
+    companion object {
+        const val NEW_NOTE = -1L
     }
-    emit(list)
+    enum class NoteType { TEXT, AUDIO}
 }
 
-fun test() {
-    val note = Note("1","1", type = Note.NoteType.AUDIO)
-    Note.fakeNotes
-}
 
