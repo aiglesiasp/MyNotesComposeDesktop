@@ -1,6 +1,7 @@
 package com.aidev.kotlinexpert.ui.screens.home
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -18,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.aidev.kotlinexpert.data.Note
 
 @Composable
-fun MyNotesList(notes: List<Note>) {
+fun MyNotesList(notes: List<Note>, onNoteClick: (Note) -> Unit) {
     LazyColumn(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -29,6 +30,7 @@ fun MyNotesList(notes: List<Note>) {
                     .padding(8.dp)
                     .fillMaxWidth(0.8f)
                     .background(Color.Blue)
+                    .clickable { onNoteClick(note) }
             ) {
                 Column(
                     modifier = Modifier.padding(16.dp)
