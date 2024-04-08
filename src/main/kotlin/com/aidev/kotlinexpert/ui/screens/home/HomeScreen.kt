@@ -13,16 +13,17 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.aidev.kotlinexpert.data.Note
 
 @Composable
 @Preview
-fun HomeScreen(vm: HomeViewModel, onCreateClick: () -> Unit) {
+fun HomeScreen(vm: HomeViewModel, onNoteClick: (noteId: Long) -> Unit) {
     MaterialTheme {
         Scaffold(
             topBar = { MyCustomTopBar(vm::onFilterClick ) },
             floatingActionButton = {
                 FloatingActionButton(
-                    onClick = { onCreateClick() }
+                    onClick = { onNoteClick(Note.NEW_NOTE) }
                 ) {
                     Icon(imageVector = Icons.Default.Add, "Add Note")
                 }
@@ -35,7 +36,12 @@ fun HomeScreen(vm: HomeViewModel, onCreateClick: () -> Unit) {
                 if(vm.state.loading) {
                     CircularProgressIndicator()
                 }
-                vm.state.filteredNotes?.let { MyNotesList(it) }
+                vm.state.filteredNotes?.let {listNotes ->
+                    MyNotesList(
+                        notes = listNotes,
+                        onNoteClick = { onNoteClick(it.id) }
+                    )
+                }
             }
         }
     }
