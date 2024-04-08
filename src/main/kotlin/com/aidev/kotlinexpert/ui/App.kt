@@ -19,7 +19,7 @@ fun App() {
 
     route.let {
         when(it) {
-            is Route.Home -> HomeScreen(vm = HomeViewModel(scope), onCreateClick = { route = Route.Detail(-1L)})
+            is Route.Home -> HomeScreen(vm = HomeViewModel(scope), onNoteClick = { noteId ->  route = Route.Detail(noteId)})
             is Route.Detail -> DetailScreen(vm = DetailViewModel(scope, it.id), onClose = { route = Route.Home })
 
         }
